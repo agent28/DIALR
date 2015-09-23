@@ -1,0 +1,287 @@
+<html>
+	<head>
+		<title>DIALR: Home</title>
+		<link rel="stylesheet" type="text/css" href="css/core.css">
+    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+    <script src="js/recorder.js"></script>
+    <script src="js/zip.js"></script>
+    <script src="js/zip-fs.js"></script>
+    <script src="js/zip-ext.js"></script>
+    <script src="js/FileSaver.js"></script>
+	</head>
+	<body>
+		<div id="wrapper">
+      <div id="biglogocontainer">
+        <img id="biglogo" src="img/biglogo.png"/>
+      </div>
+      
+      <div id="maincontentcontainer">
+      
+      <div id="smalllogo"></div>
+      <hr class="doubleline"/>
+      <h1 id="maintitle">DIALR</h1>
+      <hr class="doubleline"/>
+      <h2 id="mainsubtitle">DIabotical Announcer Lines Recorder</h2>
+
+      <div id="content">
+      <div id="dall"><a href="#" onclick="saveZip()" >DOWNLOAD ALL LINES AS ZIP</a></div>
+        <dl id="dlist">
+
+        </dl>
+
+        <script type="text/javascript">
+
+        </script>
+      </div>
+      
+      <p id="notice">Logo and game assets used are property of <a href="http://www.reborn.gg">Diabotical</a> team</p>
+      </div>
+    </div>
+	</body>
+
+ <script type="text/javascript">
+        var audio_context;
+        var recorder;
+        var started = false;
+        var audioTags = [];
+        var count = 0;
+        files = [];
+        var voiceLines = ["start of a match",
+                          "start of a round",
+                          "end of a match",
+                          "end of a round",
+                          "#",
+                          "player wins a game",
+                          "player loses a game",
+                          "player wins a round",
+                          "player loses a round",
+                          "#",
+                          "team wins a game",
+                          "team loses a game",
+                          "team wins a round",
+                          "team loses a round",
+                          "#",
+                          "game is paused",
+                          "round is paused",
+                          "waiting for a game to start",
+                          "waiting for a round to start",
+                          "end of a game statistics show",
+                          "end of a round statistics show",
+                          "#",
+                          "countdown for a game to start",
+                          "countdown for a round to start",
+                          "#",
+                          "player gets the first frag",
+                          "player gets a frag",
+                          "player gets two frags in a row",
+                          "player gets three frags in a row",
+                          "player gets four frags in a row",
+                          "player gets five frags in a row",
+                          "player gets six frags in a row",
+                          "player gets seven frags in a row",
+                          "player gets eight frags in a row",
+                          "player gets nine frags in a row",
+                          "player gets ten and more frags in a row",
+                          "#",
+                          "team captures a flag",
+                          "team is dominating",
+                          "team is at a disadvantage",
+                          "team takes the lead",
+                          "#",
+                          "player gets two frags without dying",
+                          "player gets three frags without dying",
+                          "player gets four frags without dying",
+                          "player gets five frags without dying",
+                          "player gets six frags without dying",
+                          "player gets seven frags without dying",
+                          "player gets eight frags without dying",
+                          "player gets nine frags without dying",
+                          "player gets ten and more frags without dying",
+                          "#",
+                          "player picks up a powerful healing item",
+                          "player picks up a weak healing item",
+                          "player picks up a powerful shield item",
+                          "player picks up a weak shield item",
+                          "player picks up a powerful energy item",
+                          "player picks up a weak energy item",
+                          "#",
+                          "player picks up a shotgun",
+                          "player picks up a rocket launcher",
+                          "player picks up a railgun",
+                          "player picks up a lightning gun",
+                          "#",
+                          "player taunt #1",
+                          "player taunt #2",
+                          "player taunt #3",
+                          "#",
+                          "player revengeances after being fragged",
+                          "player moves through a teleporter",
+                          "player uses a jumppad to get in the air",
+                          "player jumps for five secons without failing",
+                          "player rocket jumps up",
+                          "player gets a frag after dieing",
+                          "player frags someone using rockets only",
+                          "player frags someone using lightning only",
+                          "#",
+                          "player uses an implosion nade",
+                          "player uses bolt three times in a row",
+                          "player uses all his energy within two seconds",
+                          "player is being followed by the spectator cameras",
+                          "player is being watched by the majority of spectators",
+                          "player uses the hook ability three times in a row",
+                          "player slides for more than a second",
+                          "#",
+                          "player is getting bored of the game ~",
+                          "player is on a serious negative k/d ratio",
+                          "team is far behind in capture the flag",
+                          "player is not getting half of the items in a match",
+                          "#",
+                          "player heals a team mate",
+                          "player energizes a team mate",
+                          "player resques a team mate",
+                          "player is getting frags defending the flag",
+                          "player is getting frags on offence",
+                          "player is camping in the midfield",
+                          "#",
+                          "player frags someone from his friendlist",
+                          "player improves 1/5 of his ranking bar",
+                          "player completes his ranking bar (while playing)",
+                          "player gets a randomized compliment",
+                          "player is complimented on his customisation",
+                          "player upgrades a weapon look",
+                          "player purchased a new voice pack",
+                          "player upgraded his eggbot look",
+                          "player gets a free drop item"].join("\n");
+
+          function startUserMedia(stream) {
+            inputPoint = audio_context.createGain();
+
+            // Create an AudioNode from the stream.
+            realAudioInput = audio_context.createMediaStreamSource(stream);
+            audioInput = realAudioInput;
+            audioInput.connect(inputPoint);
+            
+            recorder = new Recorder(inputPoint);
+          }
+
+        function init() {
+          try {
+            window.AudioContext = window.AudioContext || window.webkitAudioContext;
+            navigator.getUserMedia = ( navigator.getUserMedia ||
+                       navigator.webkitGetUserMedia ||
+                       navigator.mozGetUserMedia ||
+                       navigator.msGetUserMedia);
+            window.URL = window.URL || window.webkitURL;
+            
+            audio_context = new AudioContext();
+          } catch (e) {
+            alert('No web audio support in this browser!');
+          }
+          
+          navigator.getUserMedia(
+          {
+              "audio": {
+                  "mandatory": {
+                      "googEchoCancellation": "false",
+                      "googAutoGainControl": "false",
+                      "googNoiseSuppression": "false",
+                      "googHighpassFilter": "false"
+                  },
+                  "optional": []
+              },
+          }, startUserMedia, function(e) {
+              alert('Error getting audio');
+              console.log(e);
+          });
+
+          
+
+      };
+      window.onpageload = init();
+
+
+
+  var lines = voiceLines.split('\n');
+          for(var i = 0;i < lines.length;i++){
+            var el;
+            if(lines[i].startsWith("#")) {
+              el = document.createElement('dt');
+              el.innerHTML = lines[i].substr(1);
+            }
+            else {
+              el = document.createElement('dd');
+              el.innerHTML = lines[i];
+              
+
+              var but = document.createElement('button');
+              but.innerHTML = "record";
+              files.push(0);
+              audioTags.push(but);
+              
+              but.onclick = function a() { recStart(audioTags.indexOf(this)) };
+              count++;
+              el.appendChild(but);
+            }
+            
+            document.getElementById("dlist").appendChild(el);
+          }
+
+          function recStart(c) {
+        if(!started) {
+          started = true;
+          audioTags[c].innerHTML = "stop";
+          recorder.clear();
+          recorder.record();
+        }
+        else {
+          started = false;
+          audioTags[c].innerHTML = "record";
+          recorder.stop();
+          createDownloadLink(c);
+        }
+      };
+
+      function createDownloadLink(c) {
+        recorder.exportWAV(function(blob) {
+        var url = URL.createObjectURL(blob);
+        files[c] = blob;
+        var au = document.createElement("audio");
+        au.controls = true;
+        au.src = url;
+        if(audioTags[c].parentNode.childNodes.length <= 2) {
+          audioTags[c].parentNode.appendChild(au);
+          var dl = document.createElement("a");
+          dl.href = url;
+          dl.download = c + ".wav";
+          dl.innerHTML = "Download";
+          audioTags[c].parentNode.appendChild(dl);
+        }
+        else {
+          audioTags[c].parentNode.childNodes[2].remove();
+          audioTags[c].parentNode.childNodes[3].remove();
+          audioTags[c].parentNode.appendChild(au);
+          var dl = document.createElement("a");
+          dl.href = url;
+          dl.download = c + ".wav";
+          files[c] = blob;
+          dl.innerHTML = "Download";
+          audioTags[c].parentNode.appendChild(dl);
+        }
+        });
+      };
+
+      var zipWriter;
+      zip.workerScripts = {deflater : ["js/z-worker.js", "js/deflate.js"], inflater : ["z-worker.js", "js/inflate.js"]};
+
+      function saveZip() { 
+        var fs = new zip.fs.FS();
+        for (var f = 0; f < files.length; f++) {
+          if(files[f] != 0) 
+            fs.root.addBlob(f + '.wav', files[f]);
+        }
+        fs.root.exportBlob(function(blob) { saveAs(blob, "lines.zip") })
+    }
+
+    </script>
+
+</html>

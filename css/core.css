@@ -1,0 +1,130 @@
+#biglogo {
+  z-index: -1;
+  opacity: 0.1;
+  width: 1200px;
+  position: fixed;
+  left: -250px;
+  top: -120px;
+}
+
+#biglogocontainer {
+  width: 1200px;
+  position: absolute;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #34495e;
+  font-family: 'Lato', sans-serif;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  color: #fff;
+}
+
+#maincontentcontainer {
+  z-index: 1;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  width: 1000px;
+  top: 30px;
+}
+
+#maintitle {
+  text-align: center;
+  font-size: 150px;
+  letter-spacing: 120px;
+  text-indent: 40px;
+  margin: 0;
+  
+}
+
+#mainsubtitle {
+  text-align: center;
+  margin: 0;
+  margin-top: 5px;
+  margin-bottom: 50px;
+  letter-spacing: 7px;
+  word-spacing: 30px;
+  
+}
+
+.doubleline {
+    padding: 0;
+    margin: 0;
+    border: none;
+    border-top: medium double #fff;
+}
+
+#smalllogo {
+  background-image: url("../img/smalllogo.png");
+  width: 100px;
+  height: 100px;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+}
+
+#notice {
+  font-size: 0.75em;
+  margin: 50px 0 0 0;
+  text-align: center;
+}
+
+#notice a {
+  text-decoration: underline;
+}
+
+#content {
+
+}
+
+#content dt {
+  font-weight: bold;
+}
+
+#content dd {
+  min-height: 30px;
+}
+
+button {
+  position: absolute;
+  left: 720px;
+  min-width: 56px;
+  min-height: 30px;
+}
+
+audio {
+  position: absolute;
+  left: 780px;
+}
+
+#content a {
+  position: absolute;
+  left: 640px;
+}
+
+#dall {
+  width: 300px;
+  height: 35px;
+  text-align: center;
+  line-height: 35px;
+  margin-left: auto;
+  margin-right: auto;
+
+  background-color: #2b3c4d;
+  border: 1px solid #fff;
+}
+
+#dall a {
+  position: relative;
+  left:0;
+}
